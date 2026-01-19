@@ -46,8 +46,8 @@ CMD ["nginx", "-g", "daemon off;"]"""
             steps {
                 withCredentials([string(credentialsId: 'git-credentials', variable: 'GIT_TOKEN')]) {
                     sh '''
-                        git config user.email "jenkins@example.com"
-                        git config user.name "Jenkins"
+                        git config user.email "vasu3a1@gmail.com"
+                        git config user.name "iam-vasudev"
                         
                         sed -i "s|image: .*|image: ${DOCKER_IMAGE}:${BUILD_NUMBER}|g" k8s/deployment.yaml
                         
