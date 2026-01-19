@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: react-app
-        image: iamvasu/react-app:28
+        image: iamvasu/react-app:29
         ports:
         - containerPort: 80
 ---
