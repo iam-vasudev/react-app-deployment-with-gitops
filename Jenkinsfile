@@ -13,15 +13,14 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Build App') {
             steps {
-                sh 'npm install'
-            }
-        }
-
-        stage('Build React App') {
-            steps {
-                sh 'npm run build'
+                script {
+                    docker.image('node:22-alpine').inside {
+                        sh 'npm install'
+                        sh 'npm run build'
+                    }
+                }
             }
         }
 
