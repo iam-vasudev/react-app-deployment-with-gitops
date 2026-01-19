@@ -52,7 +52,7 @@ CMD ["nginx", "-g", "daemon off;"]"""
                         sed -i "s|image: .*|image: ${DOCKER_IMAGE}:${BUILD_NUMBER}|g" k8s/deployment.yaml
                         
                         git add k8s/deployment.yaml
-                        git commit -m "Update deployment image to ${DOCKER_IMAGE}:${BUILD_NUMBER}"
+                        git commit -m "Update deployment image to ${DOCKER_IMAGE}:${BUILD_NUMBER} [skip ci]"
                         
                         # Configure git to use the environment variables for authentication
                         # This avoids putting the username/password in the URL
