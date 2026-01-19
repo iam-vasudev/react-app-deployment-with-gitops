@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'iamvasudev/react-app' // Replace with your DockerHub info
+        DOCKER_IMAGE = 'iamvasu/react-app' // Replace with your DockerHub info
         KubeConfig = 'k8s-secret' // Replace with your Jenkins credential ID for Kubeconfig
     }
 
@@ -27,7 +27,13 @@ pipeline {
         stage('Docker Build & Push') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') { // Replace 'docker-hub-credentials' with your Jenkins credential ID
+                    // Create Dockerfile on the fly
+                    writeFile file: 'Dockerfile', text: """FROM nginx:alpine
+COPY ./dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]"""
+
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') { // Renaming to a common default 'docker-credentials' in case that's what user used.
                         def appImage = docker.build("${DOCKER_IMAGE}:${env.BUILD_NUMBER}")
                         appImage.push()
                         appImage.push('latest')
