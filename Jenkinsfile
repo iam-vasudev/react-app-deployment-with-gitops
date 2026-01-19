@@ -44,7 +44,7 @@ CMD ["nginx", "-g", "daemon off;"]"""
 
         stage('Update Manifest') {
             steps {
-                withCredentials([string(credentialsId: 'git-credentials', variable: 'GIT_TOKEN')]) {
+                withCredentials([usernamePassword(credentialsId: 'git-credentials', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                     sh '''
                         git config user.email "vasu3a1@gmail.com"
                         git config user.name "iam-vasudev"
@@ -54,11 +54,11 @@ CMD ["nginx", "-g", "daemon off;"]"""
                         git add k8s/deployment.yaml
                         git commit -m "Update deployment image to ${DOCKER_IMAGE}:${BUILD_NUMBER}"
                         
-                        # Assuming remote name is origin. Adjust if necessary.
-                        # We need to set the URL with the token for pushing.
-                        # Using the token directly in the URL: https://<token>@github.com/...
-                        git remote set-url origin https://${GIT_TOKEN}@github.com/iam-vasudev/react-app-deployment-with-gitops.git
+                        # Configure git to use the environment variables for authentication
+                        # This avoids putting the username/password in the URL
+                        git config credential.helper "!f() { echo username=\$GIT_USERNAME; echo password=\$GIT_PASSWORD; }; f"
                         
+                        # Just push to origin (credentials will be provided by the helper)
                         git push origin HEAD:main
                     '''
                 }
