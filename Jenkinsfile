@@ -65,8 +65,8 @@ CMD ["nginx", "-g", "daemon off;"]"""
                     sh """
                         git config user.email "vasu3a1@gmail.com"
                         git config user.name "iam-vasudev"
-                        sed -i "s|image: .*|image: ${DOCKER_IMAGE}:${IMAGE_TAG}|g" k8s/dev-deployment.yaml
-                        git add k8s/dev-deployment.yaml
+                        sed -i "s|image: .*|image: ${DOCKER_IMAGE}:${IMAGE_TAG}|g" k8s/dev/deployment.yaml
+                        git add k8s/dev/deployment.yaml
                         git commit -m "Update DEV image to ${IMAGE_TAG} [skip ci]"
                         git config credential.helper "!f() { echo username=\$GIT_USERNAME; echo password=\$GIT_PASSWORD; }; f"
                         git push origin HEAD:dev
@@ -85,8 +85,8 @@ CMD ["nginx", "-g", "daemon off;"]"""
                     sh """
                         git config user.email "vasu3a1@gmail.com"
                         git config user.name "iam-vasudev"
-                        sed -i "s|image: .*|image: ${DOCKER_IMAGE}:${IMAGE_TAG}|g" k8s/prod-deployment.yaml
-                        git add k8s/prod-deployment.yaml
+                        sed -i "s|image: .*|image: ${DOCKER_IMAGE}:${IMAGE_TAG}|g" k8s/prod/deployment.yaml
+                        git add k8s/prod/deployment.yaml
                         git commit -m "Update PROD image to ${IMAGE_TAG} [skip ci]"
                         git config credential.helper "!f() { echo username=\$GIT_USERNAME; echo password=\$GIT_PASSWORD; }; f"
                         git push origin HEAD:prod

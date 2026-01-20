@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: react-app
+  name: react-app-prod
   namespace: argocd
 spec:
   project: default
   source:
-    repoURL: https://github.com/iam-vasudev/react-app-deployment-with-gitops.git # Replace with your repo URL
-    targetRevision: main
-    path: k8s
+    repoURL: https://github.com/iam-vasudev/react-app-deployment-with-gitops.git
+    targetRevision: prod
+    path: k8s/prod
   destination:
     server: https://kubernetes.default.svc
     namespace: default
