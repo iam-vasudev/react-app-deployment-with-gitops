@@ -13,6 +13,19 @@ pipeline {
             }
         }
 
+        stage('Check Commit Message') {
+            steps {
+                script {
+                    def lastCommit = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+                    if (lastCommit.contains("[skip ci]") || lastCommit.contains("[ci skip]")) {
+                        echo "Skipping build due to commit message: ${lastCommit}"
+                        currentBuild.result = 'ABORTED'
+                        error("Aborting build to prevent infinite loop")
+                    }
+                }
+            }
+        }
+
         stage('Build App') {
             steps {
                 script {
