@@ -44,10 +44,13 @@ COPY ./dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]"""
 
-                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
-                        def appImage = docker.build("${DOCKER_IMAGE}:${IMAGE_TAG}")
-                        appImage.push()
-                        appImage.push('latest')
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                        sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+                        sh "docker build -t ${DOCKER_IMAGE}:${IMAGE_TAG} ."
+                        sh "docker push ${DOCKER_IMAGE}:${IMAGE_TAG}"
+                        sh "docker tag ${DOCKER_IMAGE}:${IMAGE_TAG} ${DOCKER_IMAGE}:latest"
+                        sh "docker push ${DOCKER_IMAGE}:latest"
+                        sh "docker logout"
                     }
                 }
             }
