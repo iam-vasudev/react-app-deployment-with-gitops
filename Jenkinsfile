@@ -29,7 +29,7 @@ pipeline {
         stage('Build App') {
             steps {
                 script {
-                    docker.image('node:22-alpine').inside('-u root') {
+                    docker.image('node:22-alpine').inside {
                         sh 'npm install'
                         sh 'npm run build'
                     }
